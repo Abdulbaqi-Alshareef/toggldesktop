@@ -831,6 +831,8 @@ class TOGGL_INTERNAL_EXPORT Context : public TimelineDatasource {
         const std::string &value);
 
     Poco::Mutex onboarding_service_m_;
+        
+    bool checkIfSkipPomodoro(TimeEntry *te);
 };
 
 void on_websocket_message(
