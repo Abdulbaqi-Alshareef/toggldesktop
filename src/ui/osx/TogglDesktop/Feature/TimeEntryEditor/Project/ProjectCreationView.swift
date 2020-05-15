@@ -50,7 +50,6 @@ final class ProjectCreationView: NSView {
 
     var selectedTimeEntry: TimeEntryViewItem! {
         didSet {
-            setInitialProjectColors()
             resetViews()
         }
     }
@@ -120,7 +119,6 @@ final class ProjectCreationView: NSView {
         super.awakeFromNib()
 
         initCommon()
-        setInitialProjectColors()
         selectDefaultWorkspace()
         updateLayoutState()
     }
@@ -130,6 +128,7 @@ final class ProjectCreationView: NSView {
         window?.makeFirstResponder(projectTextField)
         setInitialProjectColors()
         updateLayoutState()
+        colorPickerView.select(selectedColor)
     }
 
     @IBAction func cancelBtnOnTap(_ sender: Any) {
@@ -216,7 +215,6 @@ extension ProjectCreationView {
         addBtn.cursor = .pointingHand
         
         // Default value
-        selectedColor = ProjectColorPool.shared.defaultColor
         displayMode = .normal
         publicProjectCheckBox.state = .off
 
@@ -267,8 +265,8 @@ extension ProjectCreationView {
     }
 
     fileprivate func updateSelectColorView() {
-        colorBtn.layer?.backgroundColor = ConvertHexColor.hexCode(toNSColor: selectedColor.hex)!.cgColor
-        colorPickerView.select(selectedColor)
+        guard let color = ConvertHexColor.hexCode(toNSColor: selectedColor.hex) else { return }
+        colorBtn.layer?.backgroundColor = color.cgColor
     }
 
     fileprivate var colorBtnBorderColor: NSColor {
